@@ -34,6 +34,7 @@ end of do-file
 (Housing price data for Boston-area communities)
 
 . 
+. 
 . *--------------------3-1 Calculate A_hat, b_hat, and beta-----------------------
 . set matsize 600
 set matsize ignored.
@@ -117,7 +118,7 @@ stratio  -.05245119
 . mat u2 = diag(u2)
 
 . *Compute B_hat
-. mat B_hat = 1/506 * X' * u2 * X
+. mat B_hat = 1/501 * X' * u2 * X
 
 . *Compute AV_beta
 . mat VCE_AV_beta = 1/506 * inv(A_hat) * B_hat * inv(A_hat)
@@ -126,21 +127,21 @@ stratio  -.05245119
 
 symmetric B_hat[5,5]
               lnox      ldist      rooms    stratio       cons
-   lnox  .23768592
-  ldist  .08612484  .05198836
-  rooms  .75810964  .30045568   2.508869
-stratio  2.5127827  .93012932  8.0444405  26.759941
-   cons  .12806011  .04913417  .41309124  1.3593478   .0695326
+   lnox  .24005803
+  ldist  .08698437   .0525072
+  rooms   .7656756  .30345424  2.5339077
+stratio  2.5378604  .93941205  8.1247244  27.027006
+   cons  .12933815  .04962453  .41721391  1.3729141  .07022654
 
 . mat list VCE_AV_beta /*Here we obtain VCE_AV_beta*/
 
 symmetric VCE_AV_beta[5,5]
                lnox       ldist       rooms     stratio        cons
-   lnox   .01591953
-  ldist    .0059216   .00283701
-  rooms   .00091498   .00025201   .00060506
-stratio   .00003519  -.00003067   .00004813   .00002103
-   cons  -.04053434  -.01465965  -.00658215   -.0006979   .14094504
+   lnox    .0160784
+  ldist    .0059807   .00286532
+  rooms   .00092411   .00025453    .0006111
+stratio   .00003554  -.00003098   .00004861   .00002124
+   cons  -.04093888  -.01480595  -.00664785  -.00070486   .14235167
 
 . *Compare with Stata results
 . qui reg lprice lnox ldist rooms stratio,vce(robust)
