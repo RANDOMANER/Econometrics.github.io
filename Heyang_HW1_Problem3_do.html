@@ -49,7 +49,7 @@ mat u2 = hadamard(u,u) /*obtain u^2*/
 mat u2 = u2'
 mat u2 = diag(u2)
 *Compute B_hat
-mat B_hat = 1/506 * X' * u2 * X
+mat B_hat = 1/501 * X' * u2 * X
 *Compute AV_beta
 mat VCE_AV_beta = 1/506 * inv(A_hat) * B_hat * inv(A_hat)
 mat list B_hat /*Here we have B_hat*/
