@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<!--
+
+        This HTML file was computer-generated on 4 Apr 2019 at 06:33:45 by
+        hyperlog, a Stata program written by John Eng (jeng@jhmi.edu).
+
+-->
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Stata Log File</TITLE>
+<STYLE TYPE="text/css">
+PRE.hyperlog {font-family: Andale Mono, Lucida Console, Courier, Courier New, monospace; font-size: 11px}
+A.hyperlog {color: red}
+</STYLE>
+</HEAD>
+<BODY BGCOLOR=WHITE>
+<PRE CLASS=hyperlog>
+--------------------------------------------------------------------------------------------------------------------------
+      name:  &lt;unnamed>
+       log:  C:\Users\young\Desktop\FDSM\2020-2021\Semester 2-1\计量经济学Ⅱ\Homework\HeYang_Key to HW_Basics\stata\Heyang_
+> HW1_Problem3.log
+  log type:  text
+ opened on:   4 Apr 2019, 06:33:24
+
+. 
+end of do-file
+
+. do "C:\Users\young\AppData\Local\Temp\STD8948_000000.tmp"
+
+. *******************This is the code for HW1_Basics_Problem 3********************
+. 
+. use http://www.stata-press.com/data/imeus/hprice2a, clear
+(Housing price data for Boston-area communities)
+
+. 
+. *--------------------3-1 Calculate A_hat, b_hat, and beta-----------------------
+. set matsize 600
+set matsize ignored.
+    Matrix sizes are no longer limited by c(matsize) in modern Statas.  Matrix sizes are now limited by flavor of Stata.
+    See limits for more details.
+
+. gen cons = 1
+
+. *Store values of varibales in the matrix, respectively
+. mkmat lprice, matrix(y) 
+
+. mkmat lnox ldist rooms stratio cons, matrix(X) /*To compare with Stata results, 
+> I put the constant matrix (i.e. cons) in the last row*/
+
+. *Compute A_hat and b_hat
+. mat A_hat = 1/506 * X' * X
+
+. mat b_hat = 1/506 * X' * y
+
+. mat beta = inv(A_hat) * b_hat
+
+. *List the results
+. mat list A_hat /*Here we obtain A_hat*/
+
+symmetric A_hat[5,5]
+              lnox      ldist      rooms    stratio       cons
+   lnox  2.9070442
+  ldist  1.9184422  1.7023842
+  rooms    10.5964  7.5639862  39.981964
+stratio  31.352484  21.660118  115.46149  345.42685
+   cons  1.6930914  1.1882332  6.2840514  18.459289          1
+
+. mat list b_hat /*Here we obtain b_hat*/
+
+b_hat[5,1]
+            lprice
+   lnox  16.788885
+  ldist  11.901347
+  rooms  62.651741
+stratio  183.06463
+   cons  9.9410572
+
+. mat list beta /*Here we obtain beta*/
+
+beta[5,1]
+             lprice
+   lnox  -.95354002
+  ldist  -.13434015
+  rooms   .25452706
+stratio  -.05245119
+   cons   11.083865
+
+. *Compare with Stata results
+. reg lprice lnox ldist rooms stratio
+
+      Source |       SS           df       MS      Number of obs   =       506
+-------------+----------------------------------   F(4, 501)       =    175.86
+       Model |  49.3987735         4  12.3496934   Prob > F        =    0.0000
+    Residual |  35.1834974       501  .070226542   R-squared       =    0.5840
+-------------+----------------------------------   Adj R-squared   =    0.5807
+       Total |  84.5822709       505  .167489645   Root MSE        =      .265
+
+------------------------------------------------------------------------------
+      lprice |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        lnox |    -.95354   .1167418    -8.17   0.000    -1.182904   -.7241762
+       ldist |  -.1343401   .0431032    -3.12   0.002    -.2190255   -.0496548
+       rooms |   .2545271   .0185303    13.74   0.000     .2181203    .2909338
+     stratio |  -.0524512   .0058971    -8.89   0.000    -.0640373   -.0408651
+       _cons |   11.08387   .3181115    34.84   0.000     10.45887    11.70886
+------------------------------------------------------------------------------
+
+. 
+. 
+. *--------------------3-2 Calculate B_hat and VCE_AV_beta------------------------
+. mat u = y - X * beta /*obtain the residual*/
+
+. mat u2 = hadamard(u,u) /*obtain u^2*/
+
+. svmat u, names(u) /*Convert to a variable*/
+
+. mat u2 = u2'
+
+. mat u2 = diag(u2)
+
+. *Compute B_hat
+. mat B_hat = 1/506 * X' * u2 * X
+
+. *Compute AV_beta
+. mat VCE_AV_beta = 1/506 * inv(A_hat) * B_hat * inv(A_hat)
+
+. mat list B_hat /*Here we have B_hat*/
+
+symmetric B_hat[5,5]
+              lnox      ldist      rooms    stratio       cons
+   lnox  .23768592
+  ldist  .08612484  .05198836
+  rooms  .75810964  .30045568   2.508869
+stratio  2.5127827  .93012932  8.0444405  26.759941
+   cons  .12806011  .04913417  .41309124  1.3593478   .0695326
+
+. mat list VCE_AV_beta /*Here we obtain VCE_AV_beta*/
+
+symmetric VCE_AV_beta[5,5]
+               lnox       ldist       rooms     stratio        cons
+   lnox   .01591953
+  ldist    .0059216   .00283701
+  rooms   .00091498   .00025201   .00060506
+stratio   .00003519  -.00003067   .00004813   .00002103
+   cons  -.04053434  -.01465965  -.00658215   -.0006979   .14094504
+
+. *Compare with Stata results
+. qui reg lprice lnox ldist rooms stratio,vce(robust)
+
+. vce
+
+Covariance matrix of coefficients of regress model
+
+        e(V) |       lnox       ldist       rooms     stratio       _cons 
+-------------+------------------------------------------------------------
+        lnox |   .0160784                                                 
+       ldist |   .0059807   .00286532                                     
+       rooms |  .00092411   .00025453    .0006111                         
+     stratio |  .00003554  -.00003098   .00004861   .00002124             
+       _cons | -.04093888  -.01480595  -.00664785  -.00070486   .14235167 
+
+. 
+. *----------------------3-3 Calculate sigma2 and AV_beta-------------------------
+. mat trace = trace(u2)
+
+. mat sigma2 = 1/506 * trace
+
+. mat AV_beta = 1/506 * inv(A_hat) * sigma2
+
+. mat list sigma2 /*Here we have sigma2*/
+
+symmetric sigma2[1,1]
+          c1
+r1  .0695326
+
+. mat list AV_beta /*Here we have AV_beta*/
+
+symmetric AV_beta[5,5]
+               lnox       ldist       rooms     stratio        cons
+   lnox   .01349398
+  ldist   .00422036   .00183953
+  rooms    .0003493   .00003012   .00033998
+stratio   9.644e-07   .00002161    .0000334   .00003443
+   cons  -.03007415  -.00991936  -.00338023   -.0008728   .10019501
+
+. *Compare with Stata results
+. qui reg lprice lnox ldist rooms stratio
+
+. vce
+
+Covariance matrix of coefficients of regress model
+
+        e(V) |       lnox       ldist       rooms     stratio       _cons 
+-------------+------------------------------------------------------------
+        lnox |  .01362865                                                 
+       ldist |  .00426247   .00185789                                     
+       rooms |  .00035279   .00003043   .00034337                         
+     stratio |  9.740e-07   .00002182   .00003374   .00003478             
+       _cons | -.03037429  -.01001835  -.00341397  -.00088151   .10119496 
+
+. 
+end of do-file
+
+. do "C:\Users\young\AppData\Local\Temp\STD8948_000000.tmp"
+
+. log close
+      name:  &lt;unnamed>
+       log:  C:\Users\young\Desktop\FDSM\2020-2021\Semester 2-1\计量经济学Ⅱ\Homework\HeYang_Key to HW_Basics\stata\Heyang_
+> HW1_Problem3.log
+  log type:  text
+ closed on:   4 Apr 2019, 06:33:40
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
