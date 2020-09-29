@@ -47,7 +47,6 @@ reg lprice lnox ldist rooms stratio
 *--------------------3-2 Calculate B_hat and VCE_AV_beta------------------------
 mat u = y - X * beta /*obtain the residual*/
 mat u2 = hadamard(u,u) /*obtain u^2*/
-svmat u, names(u) /*Convert to a variable*/
 mat u2 = u2'
 mat u2 = diag(u2)
 *Compute B_hat
