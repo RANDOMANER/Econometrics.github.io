@@ -2,7 +2,7 @@
 <HTML>
 <!--
 
-        This HTML file was computer-generated on 4 Apr 2019 at 06:33:45 by
+        This HTML file was computer-generated on 4 Apr 2019 at 09:43:33 by
         hyperlog, a Stata program written by John Eng (jeng@jhmi.edu).
 
 -->
@@ -43,7 +43,6 @@ mat list beta /*Here we obtain beta*/
 *Compare with Stata results
 reg lprice lnox ldist rooms stratio
 
-
 *--------------------3-2 Calculate B_hat and VCE_AV_beta------------------------
 mat u = y - X * beta /*obtain the residual*/
 mat u2 = hadamard(u,u) /*obtain u^2*/
@@ -61,7 +60,7 @@ vce
 
 *----------------------3-3 Calculate sigma2 and AV_beta-------------------------
 mat trace = trace(u2)
-mat sigma2 = 1/506 * trace
+mat sigma2 = 1/501 * trace
 mat AV_beta = 1/506 * inv(A_hat) * sigma2
 mat list sigma2 /*Here we have sigma2*/
 mat list AV_beta /*Here we have AV_beta*/

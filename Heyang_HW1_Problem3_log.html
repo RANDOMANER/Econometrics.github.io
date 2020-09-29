@@ -2,7 +2,7 @@
 <HTML>
 <!--
 
-        This HTML file was computer-generated on 4 Apr 2019 at 06:33:45 by
+        This HTML file was computer-generated on 4 Apr 2019 at 09:43:33 by
         hyperlog, a Stata program written by John Eng (jeng@jhmi.edu).
 
 -->
@@ -21,7 +21,7 @@ A.hyperlog {color: red}
        log:  C:\Users\young\Desktop\FDSM\2020-2021\Semester 2-1\计量经济学Ⅱ\Homework\HeYang_Key to HW_Basics\stata\Heyang_
 > HW1_Problem3.log
   log type:  text
- opened on:   4 Apr 2019, 06:33:24
+ opened on:   4 Apr 2019, 09:43:14
 
 . 
 end of do-file
@@ -107,7 +107,6 @@ stratio  -.05245119
 ------------------------------------------------------------------------------
 
 . 
-. 
 . *--------------------3-2 Calculate B_hat and VCE_AV_beta------------------------
 . mat u = y - X * beta /*obtain the residual*/
 
@@ -162,25 +161,25 @@ Covariance matrix of coefficients of regress model
 . *----------------------3-3 Calculate sigma2 and AV_beta-------------------------
 . mat trace = trace(u2)
 
-. mat sigma2 = 1/506 * trace
+. mat sigma2 = 1/501 * trace
 
 . mat AV_beta = 1/506 * inv(A_hat) * sigma2
 
 . mat list sigma2 /*Here we have sigma2*/
 
 symmetric sigma2[1,1]
-          c1
-r1  .0695326
+           c1
+r1  .07022654
 
 . mat list AV_beta /*Here we have AV_beta*/
 
 symmetric AV_beta[5,5]
                lnox       ldist       rooms     stratio        cons
-   lnox   .01349398
-  ldist   .00422036   .00183953
-  rooms    .0003493   .00003012   .00033998
-stratio   9.644e-07   .00002161    .0000334   .00003443
-   cons  -.03007415  -.00991936  -.00338023   -.0008728   .10019501
+   lnox   .01362865
+  ldist   .00426247   .00185789
+  rooms   .00035279   .00003043   .00034337
+stratio   9.740e-07   .00002182   .00003374   .00003478
+   cons  -.03037429  -.01001835  -.00341397  -.00088151   .10119496
 
 . *Compare with Stata results
 . qui reg lprice lnox ldist rooms stratio
@@ -207,7 +206,7 @@ end of do-file
        log:  C:\Users\young\Desktop\FDSM\2020-2021\Semester 2-1\计量经济学Ⅱ\Homework\HeYang_Key to HW_Basics\stata\Heyang_
 > HW1_Problem3.log
   log type:  text
- closed on:   4 Apr 2019, 06:33:40
+ closed on:   4 Apr 2019, 09:43:29
 --------------------------------------------------------------------------------------------------------------------------
 
 
